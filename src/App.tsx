@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { SymptomForm } from './components/SymptomForm';
 import { InsightPanel } from './components/InsightPanel';
+import { SymptomChart } from './components/SymptomChart'; // New Import
 import { askDrHope } from './services/vertexService';
 import { saveLogToLocalFolder } from './services/storageService';
 import { parseDrHopeResponse } from './lib/parser';
@@ -9,11 +10,14 @@ import { UCSymptomLog, DrHopeInsight } from './types';
 function App() {
   const [insight, setInsight] = useState<DrHopeInsight | null>(null);
   const [loading, setLoading] = useState(false);
+  const [history, setHistory] = useState<UCSymptomLog[]>([]); // New History State
 
   const handleConsultation = async (log: UCSymptomLog) => {
     setLoading(true);
     try {
-      // 1. Prepare clinical context for the Researcher persona
+      // 1. Update History immediately for the chart
+      setHistory(prev => [...prev, log]);
+
       const clinicalData = `
         PATIENT LOG:
         Pain Level: ${log.painLevel}/10
@@ -23,14 +27,10 @@ function App() {
         Notes: ${log.notes}
       `;
 
-      // 2. Fetch AI Insight
       const rawResponse = await askDrHope(clinicalData);
       const structuredInsight = parseDrHopeResponse(rawResponse.text);
-      
       setInsight(structuredInsight);
 
-      // 3. Optional: Trigger local save immediately or via button
-      console.log("Analysis Complete for Log ID:", log.id);
     } catch (error) {
       console.error("Clinical Consultation Failed:", error);
     } finally {
@@ -48,7 +48,10 @@ function App() {
           </p>
         </header>
 
-        <main className="space-y-10">
+        <main className="space-y-6">
+          {/* Trend Chart positioned at the top for context */}
+          <SymptomChart logs={history} />
+
           <section>
             <SymptomForm onSave={handleConsultation} />
           </section>
@@ -65,10 +68,9 @@ function App() {
           {insight && !loading && (
             <section className="animate-in fade-in duration-1000">
               <InsightPanel insight={insight} />
-              
               <div className="mt-8 flex justify-center">
                 <button 
-                  onClick={() => saveLogToLocalFolder(insight)}
+                  onClick={() => saveLogToLocalFolder({ insight, history })}
                   className="text-xs text-slate-400 hover:text-indigo-600 flex items-center gap-2 transition-colors uppercase tracking-widest font-bold"
                 >
                   <span>↓</span> Archive Research Insight to Local Folder
