@@ -1,10 +1,10 @@
 {
-  "name": "react-example",
+  "name": "uc-with-dr-hope",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --port=3000 --host=0.0.0.0",
+    "dev": "vite --port=3200 --host=0.0.0.0",
     "build": "vite build",
     "preview": "vite preview",
     "clean": "rm -rf dist",
@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@google-cloud/vertexai": "^1.11.0",
-    "@google/genai": "^1.29.0",
+    "@google/generative-ai": "^0.21.0",
     "@tailwindcss/vite": "^4.1.14",
     "@vercel/node": "^5.7.4",
     "@vitejs/plugin-react": "^5.0.4",
@@ -35,7 +35,10 @@
     "autoprefixer": "^10.4.21",
     "tailwindcss": "^4.1.14",
     "tsx": "^4.21.0",
-    "typescript": "~5.8.2",
+    "typescript": "^5.8.2",
     "vite": "^6.2.0"
+  },
+  "engines": {
+    "node": "20.x"
   }
 }
