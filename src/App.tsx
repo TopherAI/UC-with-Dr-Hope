@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SymptomForm } from './components/SymptomForm';
+import SymptomForm from './components/SymptomForm';
 import { InsightPanel } from './components/InsightPanel';
 import { TrendAnalysis } from './components/TrendAnalysis';
 import { HandoffControl } from './components/HandoffControl';
