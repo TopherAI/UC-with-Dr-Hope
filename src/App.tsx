@@ -29,7 +29,7 @@ function App() {
         Notes: ${log.notes}
       `;
 
-      // 3. Fetch academic/honest insight
+      // 3. Fetch academic/honest insight from Vertex AI
       const rawResponse = await askDrHope(clinicalData);
       const structuredInsight = parseDrHopeResponse(rawResponse.text);
       
@@ -73,4 +73,41 @@ function App() {
           {loading && (
             <div className="flex flex-col items-center justify-center py-10 space-y-4">
               <div className="w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full animate-spin"></div>
-              <p className="text-sm text-indigo-
+              <p className="text-sm text-indigo-600 font-medium animate-pulse">
+                Analyzing biomarkers and clinical trends...
+              </p>
+            </div>
+          )}
+
+          {insight && !loading && (
+            <section className="animate-in fade-in duration-1000">
+              <InsightPanel insight={insight} />
+              
+              <div className="mt-8 flex justify-center">
+                <button 
+                  onClick={() => saveLogToLocalFolder({ insight, logHistory: history })}
+                  className="text-xs text-slate-400 hover:text-indigo-600 flex items-center gap-2 transition-colors uppercase tracking-widest font-bold"
+                >
+                  <span>↓</span> Archive Clinical Insight to Local Folder
+                </button>
+              </div>
+            </section>
+          )}
+        </main>
+
+        {/* Slide-over Trend Lab */}
+        <TrendAnalysis 
+          history={history} 
+          isOpen={isTrendsOpen} 
+          onClose={() => setIsTrendsOpen(false)} 
+        />
+
+        <footer className="mt-20 pt-8 border-t border-slate-200 text-center text-[10px] text-slate-400 uppercase tracking-widest">
+          Research Use Only • Honest Clinical Assessment Mode
+        </footer>
+      </div>
+    </div>
+  );
+}
+
+export default App;
