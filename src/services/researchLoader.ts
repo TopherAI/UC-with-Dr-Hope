@@ -1,25 +1,30 @@
-// Importing the Deep Research files from your data directory
-import chatgptResearch from '../../data/chatgpt_deep_research.json';
-import claudeResearch from '../../data/claude_deep_research.json';
-import geminiResearch from '../../data/gemini_deep_research.json';
-import grokResearch from '../../data/grok_deep_research.json';
+// src/services/researchLoader.ts
 
-export const DEEP_RESEARCH_LIBRARY = {
-  chatgpt: chatgptResearch,
-  claude: claudeResearch,
-  gemini: geminiResearch,
-  grok: grokResearch
+/**
+ * TEMP BUILD-SAFE RESEARCH LOADER
+ *
+ * Direct JSON imports are disabled because Vite is failing to parse one or more
+ * deep research JSON files during build on Vercel.
+ *
+ * We are preserving the research files themselves and returning a safe fallback
+ * until the JSON loading strategy is rebuilt.
+ */
+
+type ResearchSource = unknown | null;
+
+export const DEEP_RESEARCH_LIBRARY: Record<
+  'chatgpt' | 'claude' | 'gemini' | 'grok',
+  ResearchSource
+> = {
+  chatgpt: null,
+  claude: null,
+  gemini: null,
+  grok: null,
 };
 
 /**
- * Extracts proactive-first research snippets based on a category (Fitness, Food, Meds).
+ * Returns a safe internal snippet even while the research JSON imports are disabled.
  */
 export function getInternalResearchSnippet(category: string): string {
-  // Logic to search through your JSON files for relevant proactive keywords
-  // For V1, we return a consolidated string of the "Best Of" from your deep research
   return `
-    INTERNAL DATABASE HIGHLIGHTS (${category}):
-    - Cross-Model Consensus: Focus on vagus nerve stimulation for proactive motility.
-    - Model Comparison: Grok emphasizes emerging JAK inhibitor data, while Claude/Gemini focus on the gut-brain axis through stretching and anti-inflammatory diet protocols.
-  `;
-}
+INTERNAL DATABASE HIGHLIGHTS
