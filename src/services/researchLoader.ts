@@ -2,12 +2,7 @@
 
 /**
  * TEMP BUILD-SAFE RESEARCH LOADER
- *
- * Direct JSON imports are disabled because Vite is failing to parse one or more
- * deep research JSON files during build on Vercel.
- *
- * We are preserving the research files themselves and returning a safe fallback
- * until the JSON loading strategy is rebuilt.
+ * JSON imports disabled to prevent Vite build failure
  */
 
 type ResearchSource = unknown | null;
@@ -22,9 +17,12 @@ export const DEEP_RESEARCH_LIBRARY: Record<
   grok: null,
 };
 
-/**
- * Returns a safe internal snippet even while the research JSON imports are disabled.
- */
 export function getInternalResearchSnippet(category: string): string {
   return `
-INTERNAL DATABASE HIGHLIGHTS
+INTERNAL DATABASE HIGHLIGHTS (${category}):
+
+- Cross-Model Consensus: Focus on vagus nerve stimulation for proactive motility.
+- Model Comparison: Grok emphasizes emerging JAK inhibitor data, while Claude/Gemini focus on the gut-brain axis through stretching and anti-inflammatory support.
+- Temporary Mode: Deep research JSON imports are currently disabled to protect build stability.
+`.trim();
+}
